@@ -22,8 +22,11 @@ build_helm:
     paths:
       - "*tgz"
 
+services:
+  - docker:19.03.12-dind
+
 build_docker:
-  image: docker:dind
+  image: docker:19.03.13
   stage: build
   script:
     - docker build -t registry.home.exphost.pl/exphost/template-renderer:$CI_COMMIT_REF_SLUG .
