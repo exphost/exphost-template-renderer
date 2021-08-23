@@ -26,7 +26,8 @@ build_helm:
 #  - docker:dind
 
 build_docker:
-  image: docker:dind
+  #image: docker:dind
+  image: docker:20.10.8-dind-rootless
   stage: build
   script:
     - dockerd &
