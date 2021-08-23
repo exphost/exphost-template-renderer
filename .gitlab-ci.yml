@@ -28,6 +28,8 @@ services:
 build_docker:
   image: docker:19.03.13
   stage: build
+  before_script:
+    - docker info
   script:
     - docker build -t registry.home.exphost.pl/exphost/template-renderer:$CI_COMMIT_REF_SLUG .
     - docker push registry.home.exphost.pl/exphost/template-renderer
