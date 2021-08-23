@@ -25,16 +25,16 @@ build_helm:
 #services:
 #  - docker:dind
 
-build_docker:
-  #image: docker:dind
-  image: docker:20.10.8-dind-rootless
-  stage: build
-  script:
-    - dockerd &
-    - docker build -t registry.home.exphost.pl/exphost/template-renderer:$CI_COMMIT_REF_SLUG .
-    - docker push registry.home.exphost.pl/exphost/template-renderer
-  only:
-    changes:
-      - Dockerfile
-      - /app/**/*
-      - .gitlab-ci.yml
+#build_docker:
+#  #image: docker:dind
+#  image: docker:20.10.8-dind-rootless
+#  stage: build
+#  script:
+#    - dockerd &
+#    - docker build -t registry.home.exphost.pl/exphost/template-renderer:$CI_COMMIT_REF_SLUG .
+#    - docker push registry.home.exphost.pl/exphost/template-renderer
+#  only:
+#    changes:
+#      - Dockerfile
+#      - /app/**/*
+#      - .gitlab-ci.yml
