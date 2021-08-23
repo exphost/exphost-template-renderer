@@ -46,7 +46,7 @@ build_docker:
   image: docker:dind
   stage: build
   script:
-    - docker &
+    - dockerd &
     - docker build -t registry.home.exphost.pl/exphost/template-renderer:$CI_COMMIT_REF_SLUG .
     - docker push registry.home.exphost.pl/exphost/template-renderer
   only:
