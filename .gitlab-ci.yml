@@ -40,10 +40,10 @@ build_helm:
       - "*tgz"
 
 services:
-  - docker:19.03.12-dind
+  - docker:dind
 
 build_docker:
-  image: docker:19.03.13
+  image: docker
   stage: build
   before_script:
     - docker info
@@ -54,3 +54,4 @@ build_docker:
     changes:
       - Dockerfile
       - /app/**/*
+      - .gitlab-ci.yml
