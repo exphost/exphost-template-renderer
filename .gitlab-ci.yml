@@ -23,6 +23,7 @@ build_helm:
       - "*tgz"
 
 build_docker:
+  image: docker:stable
   stage: build
   script:
     - docker build -t registry.home.exphost.pl/exphost/template-renderer:$CI_COMMIT_REF_SLUG .
