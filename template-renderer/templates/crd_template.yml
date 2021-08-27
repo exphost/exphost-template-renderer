@@ -17,10 +17,26 @@ spec:
               properties:
                 template:
                   type: string
-                destination:
+                destination_name:
+                  type: string
+                destination_key:
                   type: string
                 destination_type:
                   type: string
+                values:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      source_name:
+                        type: string
+                      source_type:
+                        type: string
+                      source_key:
+                        type: string
+                    
   scope: Namespaced
   names:
     plural: templates

@@ -1,0 +1,13 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: template-renderer
+subjects:
+- kind: ServiceAccount
+  name: template-renderer
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: template-renderer
+  apiGroup: rbac.authorization.k8s.io

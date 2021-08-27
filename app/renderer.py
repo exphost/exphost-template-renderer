@@ -6,6 +6,7 @@ import base64
 
 @kopf.on.resume('exphost.pl','v1','templates')
 @kopf.on.create('exphost.pl','v1','templates')
+@kopf.on.update('exphost.pl','v1','templates')
 @kopf.timer('exphost.pl','v1','templates', interval=60.0)
 def create_fn(spec, name, namespace ,logger, **kwargs):
     logger.info(f"template creates: {spec}, {name}, {namespace}")
@@ -47,20 +48,17 @@ def create_fn(spec, name, namespace ,logger, **kwargs):
             )
         }
         logger.info("rendered content: {manifest}".format(manifest=manifest['body'].data))
-        if spec['destination_type'] == "ConfigMap":
-            if len(list(filter(lambda x: x.metadata.name == spec['destination_name'], list_func(namespace).items))):
-                logger.info("configmap {name} exists".format(name=spec['destination_name']))
-                bo = read_func(spec['destination_name'], namespace)
-                different = (bo.data != manifest['body'].data)
-                logger.info("Diff? {diff}".format(diff=different))
-                if different:
-                    patch = patch_func(spec['destination_name'], namespace, manifest['body'])
-                    logger.info("Patch: {patch}".format(patch=patch))
-            else:
-                logger.info("creating config map {name}".format(name=spec['destination_name']))
-                create_func(**manifest)
-        elif spec['destination_type'] == "Secret":
-            pass
+        if len(list(filter(lambda x: x.metadata.name == spec['destination_name'], list_func(namespace).items))):
+            logger.info("{type} {name} exists".format(type=spec['destination_type'], name=spec['destination_name']))
+            bo = read_func(spec['destination_name'], namespace)
+            different = (bo.data != manifest['body'].data)
+            logger.info("Diff? {diff}".format(diff=different))
+            if different:
+                patch = patch_func(spec['destination_name'], namespace, manifest['body'])
+                logger.info("Patch: {patch}".format(patch=patch))
+        else:
+            logger.info("creating {type} {name}".format(type=spec['destination_type'], name=spec['destination_name']))
+            create_func(**manifest)
             
     except kubernetes.client.exceptions.ApiException as e:
         logger.error(f"Error while reading {val}: {e}")

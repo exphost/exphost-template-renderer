@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: template-renderer
+  labels:
+    app: template-renderer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: template-renderer
+  template:
+    metadata:
+      labels:
+        app: template-renderer
+    spec:
+      serviceAccount: template-renderer
+      containers:
+        - name: renderer
+          image: registry.home.exphost.pl/exphost/template-renderer:latest
+          imagePullPolicy: Always
+          #command: 
+          #  - /app/renderer.py
