@@ -43,6 +43,8 @@ def create_fn(spec, name, namespace ,logger, **kwargs):
             'body': dest_obj(
                 metadata=kubernetes.client.V1ObjectMeta(
                     name=spec['destination_name'],
+                    labels=spec.get('destination_labels', {}),
+                    annotations=spec.get('destination_annotations', {}),
                 ),
                 data={ spec['destination_key']: hash(jinja2.Template(spec['template']).render(values)) }
             )
