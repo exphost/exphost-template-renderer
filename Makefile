@@ -1,8 +1,10 @@
+TAG = latest
+APP = $(shell basename $(CURDIR))
 build:
-	docker build -t registry.home.exphost.pl/exphost/template-renderer .
+	docker build -t registry.gitlab.exphost.pl/exphost/$(APP):$(TAG) .
 
 push:
-	docker push registry.home.exphost.pl/exphost/template-renderer
+	docker push registry.gitlab.exphost.pl/exphost/$(APP):$(TAG)
 
 run:
-	docker run -it registry.home.exphost.pl/exphost/template-renderer
+	docker run -it registry.gitlab.exphost.pl/exphost/$(APP):$(TAG)

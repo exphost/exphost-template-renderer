@@ -3,6 +3,7 @@ import kopf
 import kubernetes
 import jinja2
 import base64
+from prometheus_client import start_http_server
 
 @kopf.on.resume('exphost.pl','v1','templates')
 @kopf.on.create('exphost.pl','v1','templates')
@@ -65,3 +66,4 @@ def create_fn(spec, name, namespace ,logger, **kwargs):
     except kubernetes.client.exceptions.ApiException as e:
         logger.error(f"Error while reading {val}: {e}")
 
+start_http_server(8000)
