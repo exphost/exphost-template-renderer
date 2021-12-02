@@ -50,17 +50,18 @@ def create_fn(spec, name, namespace ,logger, **kwargs):
                 data={ spec['destination_key']: hash(jinja2.Template(spec['template']).render(values)) }
             )
         }
-        logger.info("rendered content: {manifest}".format(manifest=manifest['body'].data))
+        kopf.append_owner_reference(manifest['body'])
         if len(list(filter(lambda x: x.metadata.name == spec['destination_name'], list_func(namespace).items))):
             logger.info("{type} {name} exists".format(type=spec['destination_type'], name=spec['destination_name']))
             bo = read_func(spec['destination_name'], namespace)
             different = (bo.data != manifest['body'].data)
             logger.info("Diff? {diff}".format(diff=different))
             if different:
-                patch = patch_func(spec['destination_name'], namespace, manifest['body'])
                 logger.info("Patch: {patch}".format(patch=patch))
+                patch = patch_func(spec['destination_name'], namespace, manifest['body'])
         else:
             logger.info("creating {type} {name}".format(type=spec['destination_type'], name=spec['destination_name']))
+            logger.info("manifest: {manifest}".format(manifest=manifest))
             create_func(**manifest)
             
     except kubernetes.client.exceptions.ApiException as e:
