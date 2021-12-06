@@ -3,13 +3,20 @@ import kopf
 import kubernetes
 import jinja2
 import base64
-from prometheus_client import start_http_server
+from prometheus_client import start_http_server, Counter, Histogram
+
+metric_exceptions = Counter('template_renderer_render_exceptions', "Count exceptions during rendering")
+metric_counter = Counter('template_renderer_render_calls', "Count render function calls")
+metric_timing = Histogram('template_renderer_render_seconds', "Time spend on rendering")
 
 @kopf.on.resume('exphost.pl','v1','templates')
 @kopf.on.create('exphost.pl','v1','templates')
 @kopf.on.update('exphost.pl','v1','templates')
 @kopf.timer('exphost.pl','v1','templates', interval=60.0)
+@metric_timing.time()
+@metric_exceptions.count_exceptions()
 def create_fn(body, spec, name, namespace ,logger, **kwargs):
+    metric_counter.inc()
     logger.info(f"template creates: {body}")
     api = kubernetes.client.CoreV1Api()
     values = {}
